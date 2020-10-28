@@ -1,32 +1,17 @@
 const express = require('express');
-
-//define contacts array
-const contacts = [{ name: 'sofia', phoneNumber: '0522222' }];
+const contacts = require('../controllers/contacts.js');
 
 //init router for contacts API
 const router = express.Router();
 
 //getting all the contacts
-router.get('/', (req, res) => res.send(contacts));
+router.get('/', contacts.getAllContacts);
 
 //adding a new contact
-router.post('/', (req, res) => {
-	const contactInfo = req.body;
-	if (!contactInfo.name || !contactInfo.phoneNumber) {
-		res.send({ message: 'Missing Information', type: 'error' });
-	} else {
-		const newContact = {
-			name: contactInfo.name,
-			phoneNumber: contactInfo.phoneNumber,
-		};
-		contacts.push(newContact);
-		res.send({
-			essage: 'New contact added',
-			type: 'success',
-			contact: newContact,
-		});
-	}
-});
+router.post('/', contacts.createContact);
+
+//finding a contacts by name
+router.get('/:name', contacts.getContactsByName);
 
 //export router
 module.exports = router;
